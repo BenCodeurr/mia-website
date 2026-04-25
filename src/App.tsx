@@ -416,8 +416,8 @@ export default function App() {
               <div
                 className={`md:hidden flex flex-col gap-2 shadow-xl relative z-20 border-white/20 transition-all duration-500 ${
                   isScrolled
-                    ? "bg-zinc-950/65 backdrop-blur-3xl p-3 border-t border-l border-r rounded-t-2xl w-full"
-                    : "bg-white/5 backdrop-blur-xl p-6 border rounded-2xl"
+                    ? "opacity-0 translate-y-4 pointer-events-none bg-white/5 backdrop-blur-xl p-6 border rounded-2xl"
+                    : "opacity-100 translate-y-0 bg-white/5 backdrop-blur-xl p-6 border rounded-2xl"
                 }`}
               >
                 <div
@@ -743,80 +743,130 @@ const RoomSlideComponent = ({
   return (
     <motion.div
       style={{ y: yTransform, opacity, zIndex }}
-      className="absolute inset-0 w-full h-[100vh] bg-[#fdfdfd] flex flex-col items-center justify-center overflow-hidden shadow-[0_-15px_40px_rgba(0,0,0,0.08)] py-6 md:py-10"
+      className="absolute inset-0 w-full h-[100vh] bg-[#fdfdfd] overflow-hidden shadow-[0_-15px_40px_rgba(0,0,0,0.08)]"
     >
-      {/* Title placed at the top of the room content */}
-      <div className="w-full flex justify-center items-center flex-col z-30 mb-6 md:mb-8">
-        <span className="font-sans font-medium text-[3vw] md:text-[0.9vw] uppercase tracking-[0.4em] text-zinc-500 mb-2 text-center leading-none">
-          {data.label}
-        </span>
-        <span className="font-serif text-[10vw] md:text-[5.5vw] uppercase leading-[0.85] tracking-tight text-zinc-900 text-center">
-          {data.title}
-        </span>
-      </div>
+      {/* ── MOBILE LAYOUT ── full-bleed image + overlay text */}
+      <div className="md:hidden relative w-full h-full">
+        <img
+          src={data.imgCenter}
+          className="absolute inset-0 w-full h-full object-cover"
+          alt={`${data.label} ${data.title}`}
+        />
+        {/* gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
 
-      <div
-        className={`max-w-[90rem] mx-auto w-full px-6 flex flex-col ${data.reverse ? "md:flex-row-reverse" : "md:flex-row"} justify-between items-center md:items-start relative z-20 gap-6 md:gap-0 mt-4 md:mt-6`}
-      >
-        {/* Secondary Detail Image (Left or Right) */}
-        <div
-          className={`w-[50%] md:w-[20%] aspect-[3/4] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] ${data.reverse ? "md:translate-y-2 lg:translate-y-4" : "-translate-y-2 md:-translate-y-4 lg:-translate-y-6"}`}
-        >
-          <img
-            src={data.imgLeft}
-            className="w-full h-full object-cover"
-            alt={`${data.label} ${data.title} Detail`}
-          />
+        {/* Top label */}
+        <div className="absolute top-0 left-0 right-0 flex flex-col items-center pt-10 z-10">
+          <span className="font-sans font-medium text-[11px] uppercase tracking-[0.4em] text-white/70 mb-1">
+            {data.label}
+          </span>
+          <span className="font-serif text-[2.8rem] uppercase leading-[0.9] tracking-tight text-white">
+            {data.title}
+          </span>
         </div>
 
-        {/* Center Main Image */}
-        <div
-          className={`w-[80%] md:w-[32%] flex flex-col relative ${data.reverse ? "-translate-y-4 md:-translate-y-6 lg:-translate-y-10" : "translate-y-2 md:translate-y-4 lg:translate-y-6"}`}
-        >
-          <div className="w-full aspect-[4/5] lg:aspect-square object-cover overflow-hidden bg-zinc-900 shadow-[0_30px_70px_rgba(0,0,0,0.25)]">
-            <img
-              src={data.imgCenter}
-              className="w-full h-full object-cover brightness-[0.85]"
-              alt={`${data.label} ${data.title} Main`}
-            />
-          </div>
-        </div>
-
-        {/* Content Details */}
-        <div
-          className={`w-[85%] md:w-[22%] flex flex-col pt-4 md:pt-10 lg:pt-16 ${data.reverse ? "md:items-end md:text-right" : ""}`}
-        >
-          <p
-            className={`text-[12px] md:text-[12px] lg:text-[13px] leading-[1.7] text-zinc-600 font-sans mb-6 md:mb-8 ${data.reverse ? "md:text-right" : ""}`}
-          >
+        {/* Bottom text content */}
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 z-10 flex flex-col gap-4">
+          <p className="text-[13px] leading-[1.7] text-white/85 font-sans">
             {data.desc}
           </p>
 
-          <div
-            className={`flex flex-col gap-1.5 mb-8 md:mb-10 w-full ${data.reverse ? "items-end" : ""}`}
-          >
-            <h4 className="text-[9px] uppercase tracking-[0.15em] text-zinc-400 font-bold mb-2.5">
+          <div className="flex flex-col gap-1.5">
+            <h4 className="text-[9px] uppercase tracking-[0.15em] text-white/50 font-bold mb-1">
               Inclus
             </h4>
             {data.includes.map((inc: string, idx: number) => (
               <span
                 key={idx}
-                className={`w-full text-[10px] lg:text-[11px] text-zinc-800 uppercase tracking-wider border-b border-zinc-200 pb-2 ${data.reverse ? "text-right" : "text-left"}`}
+                className="w-full text-[11px] text-white/80 uppercase tracking-wider border-b border-white/20 pb-2"
               >
                 {inc}
               </span>
             ))}
           </div>
 
-          <div
-            className={`flex items-end gap-2.5 ${data.reverse ? "md:justify-end" : ""}`}
-          >
-            <span className="font-serif italic text-3xl lg:text-4xl text-zinc-900">
+          <div className="flex items-end gap-2">
+            <span className="font-serif italic text-4xl text-white">
               {data.price}
             </span>
-            <span className="text-[9px] lg:text-[10px] text-zinc-500 uppercase tracking-widest pb-1">
+            <span className="text-[10px] text-white/60 uppercase tracking-widest pb-1">
               / Nuit
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DESKTOP LAYOUT ── original multi-image design */}
+      <div className="hidden md:flex flex-col items-center justify-center w-full h-full py-10">
+        {/* Title */}
+        <div className="w-full flex justify-center items-center flex-col z-30 mb-8">
+          <span className="font-sans font-medium text-[0.9vw] uppercase tracking-[0.4em] text-zinc-500 mb-2 text-center leading-none">
+            {data.label}
+          </span>
+          <span className="font-serif text-[5.5vw] uppercase leading-[0.85] tracking-tight text-zinc-900 text-center">
+            {data.title}
+          </span>
+        </div>
+
+        <div
+          className={`max-w-[90rem] mx-auto w-full px-6 flex ${data.reverse ? "flex-row-reverse" : "flex-row"} justify-between items-start relative z-20 gap-0 mt-6`}
+        >
+          {/* Secondary Detail Image */}
+          <div
+            className={`w-[20%] aspect-[3/4] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] ${data.reverse ? "translate-y-2 lg:translate-y-4" : "-translate-y-4 lg:-translate-y-6"}`}
+          >
+            <img
+              src={data.imgLeft}
+              className="w-full h-full object-cover"
+              alt={`${data.label} ${data.title} Detail`}
+            />
+          </div>
+
+          {/* Center Main Image */}
+          <div
+            className={`w-[32%] flex flex-col relative ${data.reverse ? "-translate-y-6 lg:-translate-y-10" : "translate-y-4 lg:translate-y-6"}`}
+          >
+            <div className="w-full aspect-[4/5] lg:aspect-square overflow-hidden bg-zinc-900 shadow-[0_30px_70px_rgba(0,0,0,0.25)]">
+              <img
+                src={data.imgCenter}
+                className="w-full h-full object-cover brightness-[0.85]"
+                alt={`${data.label} ${data.title} Main`}
+              />
+            </div>
+          </div>
+
+          {/* Content Details */}
+          <div
+            className={`w-[22%] flex flex-col pt-10 lg:pt-16 ${data.reverse ? "items-end text-right" : ""}`}
+          >
+            <p
+              className={`text-[12px] lg:text-[13px] leading-[1.7] text-zinc-600 font-sans mb-8 ${data.reverse ? "text-right" : ""}`}
+            >
+              {data.desc}
+            </p>
+
+            <div className={`flex flex-col gap-1.5 mb-10 w-full ${data.reverse ? "items-end" : ""}`}>
+              <h4 className="text-[9px] uppercase tracking-[0.15em] text-zinc-400 font-bold mb-2.5">
+                Inclus
+              </h4>
+              {data.includes.map((inc: string, idx: number) => (
+                <span
+                  key={idx}
+                  className={`w-full text-[11px] text-zinc-800 uppercase tracking-wider border-b border-zinc-200 pb-2 ${data.reverse ? "text-right" : "text-left"}`}
+                >
+                  {inc}
+                </span>
+              ))}
+            </div>
+
+            <div className={`flex items-end gap-2.5 ${data.reverse ? "justify-end" : ""}`}>
+              <span className="font-serif italic text-3xl lg:text-4xl text-zinc-900">
+                {data.price}
+              </span>
+              <span className="text-[9px] lg:text-[10px] text-zinc-500 uppercase tracking-widest pb-1">
+                / Nuit
+              </span>
+            </div>
           </div>
         </div>
       </div>
