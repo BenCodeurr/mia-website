@@ -103,7 +103,7 @@ export default function App() {
       <div
         className="fixed inset-0 bg-cover bg-center z-[-2]"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=2600&auto=format&fit=crop')`, // Luxury hotel
+          backgroundImage: `url('/images/hero-img.avif')`,
         }}
       />
 
