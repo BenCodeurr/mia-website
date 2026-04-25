@@ -517,6 +517,7 @@ export default function App() {
 
 const StayServicesSection = () => {
     const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+    const [activeIndex, setActiveIndex] = useState<number>(0);
 
     const services = [
         { title: "Détente. Fraîcheur. Renouveau.", description: "Offrez-vous une échappée paisible avec nos soins spa apaisants et notre expertise.", image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1200&auto=format&fit=crop" },
@@ -534,8 +535,8 @@ const StayServicesSection = () => {
                 </p>
             </div>
 
-            {/* Flex Container */}
-            <div className="max-w-[85rem] mx-auto flex flex-col md:flex-row h-[700px] gap-4">
+            {/* Desktop Flex Container (Horizontal) */}
+            <div className="hidden md:flex max-w-[85rem] mx-auto h-[700px] gap-4">
                 {services.map((service, index) => (
                     <motion.div
                         key={index}
@@ -575,6 +576,52 @@ const StayServicesSection = () => {
                         </motion.div>
                     </motion.div>
                 ))}
+            </div>
+
+            {/* Mobile Flex Container (Vertical) */}
+            <div className="flex md:hidden flex-col max-w-[85rem] mx-auto h-[80vh] gap-3">
+                {services.map((service, index) => {
+                    const isActive = activeIndex === index;
+                    return (
+                        <motion.div
+                            key={index}
+                            initial={false}
+                            animate={{ flex: isActive ? 3 : 1 }}
+                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                            onClick={() => setActiveIndex(index)}
+                            className="relative overflow-hidden rounded-xl border border-amber-600/30 cursor-pointer"
+                        >
+                            <motion.img
+                                src={service.image}
+                                alt={service.title}
+                                className="w-full h-full object-cover"
+                                animate={{ scale: isActive ? 1.05 : 1 }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                            />
+                            <div className="absolute inset-0 bg-black/40"></div>
+                            
+                            {/* Expanded Content */}
+                            <motion.div 
+                                className="absolute inset-0 p-6 flex flex-col justify-end gap-2"
+                                animate={{ opacity: isActive ? 1 : 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <h3 className="font-serif text-2xl text-white italic">{service.title}</h3>
+                                <p className="text-white/80 font-sans text-sm">{service.description}</p>
+                                <div className="w-16 h-px bg-white/50 mt-1"></div>
+                            </motion.div>
+
+                            {/* Collapsed Content */}
+                            <motion.div
+                                className="absolute inset-0 p-6 flex items-center justify-center"
+                                animate={{ opacity: isActive ? 0 : 1 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <h3 className="font-serif text-2xl text-white italic truncate">{service.title.split('.')[0]}</h3>
+                            </motion.div>
+                        </motion.div>
+                    );
+                })}
             </div>
         </section>
     );
