@@ -641,6 +641,15 @@ const TestimonialSection = () => {
   const next = () => setIndex((prev) => (prev + 1) % testimonials.length);
   const prev = () => setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (window.innerWidth < 768) {
+        setIndex((prev) => (prev + 1) % testimonials.length);
+      }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative w-full py-24 md:py-32 px-6 md:px-12 flex flex-col items-center bg-[url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center text-white">
       {/* Background overlay for mood */}
@@ -658,7 +667,22 @@ const TestimonialSection = () => {
 
         <div className="w-full md:w-1/2 relative">
           <TestimonialCard testimonial={testimonials[index]} />
-          {/* Mock Carousel Navigation */}
+          
+          {/* Mobile Dot Indicators */}
+          <div className="flex md:hidden justify-center items-center gap-2 mt-8">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`h-2 rounded-full transition-all ${
+                  i === index ? "w-6 bg-white" : "w-2 bg-white/40"
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Desktop Navigation */}
           <div className="hidden md:flex absolute -left-20 top-1/2 -translate-y-1/2 flex-col gap-6">
             <button onClick={prev} className="p-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors">
                 <ChevronLeft size={24} />
