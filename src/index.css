@@ -5,3 +5,13 @@
   --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
+
+/* Hide scrollbar for the services swipe container on mobile */
+.services-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.services-scroll::-webkit-scrollbar {
+  display: none;
+}
+

@@ -909,6 +909,7 @@ const servicesData = [
 
 const ServicesSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -917,6 +918,18 @@ const ServicesSection = () => {
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
       });
+    }
+  };
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth } = scrollRef.current;
+      const cardWidth = scrollWidth / servicesData.length;
+      const index = Math.min(
+        Math.round(scrollLeft / cardWidth),
+        servicesData.length - 1
+      );
+      setActiveIndex(index);
     }
   };
 
@@ -934,16 +947,16 @@ const ServicesSection = () => {
             créer des souvenirs inoubliables.
           </p>
 
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="hidden md:flex items-center gap-4 shrink-0">
             <button
               onClick={() => scroll("left")}
-              className="w-12 h-12 md:w-[3.5rem] md:h-[3.5rem] rounded-full border border-zinc-900 flex items-center justify-center text-zinc-900 hover:bg-zinc-100 transition-colors"
+              className="w-[3.5rem] h-[3.5rem] rounded-full border border-zinc-900 flex items-center justify-center text-zinc-900 hover:bg-zinc-100 transition-colors"
             >
               <ArrowLeft size={22} strokeWidth={1} />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="w-12 h-12 md:w-[3.5rem] md:h-[3.5rem] rounded-full bg-zinc-900 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors shadow-md"
+              className="w-[3.5rem] h-[3.5rem] rounded-full bg-zinc-900 flex items-center justify-center text-white hover:bg-zinc-800 transition-colors shadow-md"
             >
               <ArrowRight size={22} strokeWidth={1} />
             </button>
@@ -954,7 +967,8 @@ const ServicesSection = () => {
       {/* Scrollable Container for cards */}
       <div
         ref={scrollRef}
-        className="flex w-full overflow-hidden pr-6 md:pr-12 pb-8 gap-4 md:gap-6"
+        onScroll={handleScroll}
+        className="flex w-full overflow-x-auto md:overflow-hidden pr-6 md:pr-12 pb-8 gap-4 md:gap-6 services-scroll"
       >
         {servicesData.map((service, idx) => (
           <div
@@ -990,6 +1004,32 @@ const ServicesSection = () => {
               </button>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Mobile Dot Indicators */}
+      <div className="flex md:hidden justify-center items-center gap-2 mt-4 mb-2">
+        {servicesData.map((_, idx) => (
+          <button
+            key={idx}
+            aria-label={`Aller à la carte ${idx + 1}`}
+            onClick={() => {
+              if (scrollRef.current) {
+                const cardWidth =
+                  scrollRef.current.scrollWidth / servicesData.length;
+                scrollRef.current.scrollTo({
+                  left: idx * cardWidth,
+                  behavior: "smooth",
+                });
+                setActiveIndex(idx);
+              }
+            }}
+            className={`rounded-full transition-all duration-300 ${
+              activeIndex === idx
+                ? "w-5 h-[7px] bg-zinc-900"
+                : "w-[7px] h-[7px] bg-zinc-300"
+            }`}
+          />
         ))}
       </div>
     </section>
