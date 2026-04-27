@@ -11,13 +11,19 @@ import {
   ArrowLeft,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { motion, useScroll, useTransform, MotionValue, AnimatePresence } from "motion/react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  MotionValue,
+  AnimatePresence,
+} from "motion/react";
 
 export default function App() {
   const roomsSectionRef = useRef<HTMLDivElement>(null);
@@ -150,7 +156,7 @@ export default function App() {
               className="absolute left-1/2 -translate-x-1/2 top-10 md:top-auto"
             >
               <h2 className="font-serif italic text-xl md:text-[26px] font-semibold text-white tracking-wide">
-                Hôtel Mia
+                Hôtel De La Province
               </h2>
             </motion.div>
 
@@ -516,130 +522,198 @@ export default function App() {
 }
 
 const StayServicesSection = () => {
-    const [hoveredIndex, setHoveredIndex] = useState<number>(0);
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
-    const services = [
-        { title: "Détente. Fraîcheur. Renouveau.", description: "Offrez-vous une échappée paisible avec nos soins spa apaisants et notre expertise.", image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1200&auto=format&fit=crop" },
-        { title: "Fraîcheur", description: "Ressourcez-vous avec nos installations de classe mondiale.", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800&auto=format&fit=crop" },
-        { title: "Détente", description: "Un moment de calme absolu dans nos espaces de relaxation.", image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800&auto=format&fit=crop" }
-    ];
+  const services = [
+    {
+      title: "Détente. Fraîcheur. Renouveau.",
+      description:
+        "Offrez-vous une échappée paisible avec nos soins spa apaisants et notre expertise.",
+      image:
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      title: "Fraîcheur",
+      description: "Ressourcez-vous avec nos installations de classe mondiale.",
+      image:
+        "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=800&auto=format&fit=crop",
+    },
+    {
+      title: "Détente",
+      description: "Un moment de calme absolu dans nos espaces de relaxation.",
+      image:
+        "https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800&auto=format&fit=crop",
+    },
+  ];
 
-    return (
-        <section className="bg-[#fcfcfc] py-24 md:py-32 px-6 md:px-12">
-            {/* Header */}
-            <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
-                <h2 className="font-serif text-4xl md:text-5xl text-zinc-900 mb-6 italic tracking-tight">Votre Séjour, Notre Service</h2>
-                <p className="font-sans text-zinc-600 text-lg leading-relaxed">
-                    Nous fournissons tout ce dont vous avez besoin pour un séjour fluide et sans stress. De la réservation facile aux services personnalisés, votre confort est notre priorité absolue.
+  return (
+    <section className="bg-[#fcfcfc] py-24 md:py-32 px-6 md:px-12">
+      {/* Header */}
+      <div className="max-w-3xl mx-auto text-center mb-16 md:mb-24">
+        <h2 className="font-serif text-4xl md:text-5xl text-zinc-900 mb-6 italic tracking-tight">
+          Votre Séjour, Notre Service
+        </h2>
+        <p className="font-sans text-zinc-600 text-lg leading-relaxed">
+          Nous fournissons tout ce dont vous avez besoin pour un séjour fluide
+          et sans stress. De la réservation facile aux services personnalisés,
+          votre confort est notre priorité absolue.
+        </p>
+      </div>
+
+      {/* Desktop Flex Container (Horizontal) */}
+      <div className="hidden md:flex max-w-[85rem] mx-auto h-[700px] gap-4">
+        {services.map((service, index) => (
+          <motion.div
+            key={index}
+            initial={false}
+            animate={{ flex: hoveredIndex === index ? 3 : 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            onHoverStart={() => setHoveredIndex(index)}
+            className="relative overflow-hidden rounded-md border border-amber-600/30 cursor-pointer"
+          >
+            <motion.img
+              src={service.image}
+              alt={service.title}
+              className="w-full h-full object-cover"
+              animate={{ scale: hoveredIndex === index ? 1.05 : 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+            <div className="absolute inset-0 bg-black/40"></div>
+
+            {/* Expanded Content */}
+            <motion.div
+              className="absolute inset-0 p-8 flex flex-col justify-end gap-2"
+              animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3 className="font-serif text-3xl text-white italic">
+                {service.title}
+              </h3>
+              <p className="text-white/80 font-sans text-sm max-w-sm">
+                {service.description}
+              </p>
+              <div className="w-20 h-px bg-white/50 mt-2"></div>
+            </motion.div>
+
+            {/* Collapsed Content */}
+            <motion.div
+              className="absolute inset-0 p-8 flex items-center justify-center"
+              animate={{ opacity: hoveredIndex === index ? 0 : 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3 className="font-serif text-3xl text-white italic truncate">
+                {service.title.split(".")[0]}
+              </h3>
+            </motion.div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Mobile Flex Container (Vertical) */}
+      <div className="flex md:hidden flex-col max-w-[85rem] mx-auto h-[80vh] gap-3">
+        {services.map((service, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <motion.div
+              key={index}
+              initial={false}
+              animate={{ flex: isActive ? 3 : 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              onClick={() => setActiveIndex(index)}
+              className="relative overflow-hidden rounded-xl border border-amber-600/30 cursor-pointer"
+            >
+              <motion.img
+                src={service.image}
+                alt={service.title}
+                className="w-full h-full object-cover"
+                animate={{ scale: isActive ? 1.05 : 1 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              />
+              <div className="absolute inset-0 bg-black/40"></div>
+
+              {/* Expanded Content */}
+              <motion.div
+                className="absolute inset-0 p-6 flex flex-col justify-end gap-2"
+                animate={{ opacity: isActive ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h3 className="font-serif text-2xl text-white italic">
+                  {service.title}
+                </h3>
+                <p className="text-white/80 font-sans text-sm">
+                  {service.description}
                 </p>
-            </div>
+                <div className="w-16 h-px bg-white/50 mt-1"></div>
+              </motion.div>
 
-            {/* Desktop Flex Container (Horizontal) */}
-            <div className="hidden md:flex max-w-[85rem] mx-auto h-[700px] gap-4">
-                {services.map((service, index) => (
-                    <motion.div
-                        key={index}
-                        initial={false}
-                        animate={{ flex: hoveredIndex === index ? 3 : 1 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        onHoverStart={() => setHoveredIndex(index)}
-                        className="relative overflow-hidden rounded-md border border-amber-600/30 cursor-pointer"
-                    >
-                        <motion.img
-                            src={service.image}
-                            alt={service.title}
-                            className="w-full h-full object-cover"
-                            animate={{ scale: hoveredIndex === index ? 1.05 : 1 }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                        />
-                        <div className="absolute inset-0 bg-black/40"></div>
-                        
-                        {/* Expanded Content */}
-                        <motion.div 
-                            className="absolute inset-0 p-8 flex flex-col justify-end gap-2"
-                            animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <h3 className="font-serif text-3xl text-white italic">{service.title}</h3>
-                            <p className="text-white/80 font-sans text-sm max-w-sm">{service.description}</p>
-                            <div className="w-20 h-px bg-white/50 mt-2"></div>
-                        </motion.div>
-
-                        {/* Collapsed Content */}
-                        <motion.div
-                            className="absolute inset-0 p-8 flex items-center justify-center"
-                            animate={{ opacity: hoveredIndex === index ? 0 : 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <h3 className="font-serif text-3xl text-white italic truncate">{service.title.split('.')[0]}</h3>
-                        </motion.div>
-                    </motion.div>
-                ))}
-            </div>
-
-            {/* Mobile Flex Container (Vertical) */}
-            <div className="flex md:hidden flex-col max-w-[85rem] mx-auto h-[80vh] gap-3">
-                {services.map((service, index) => {
-                    const isActive = activeIndex === index;
-                    return (
-                        <motion.div
-                            key={index}
-                            initial={false}
-                            animate={{ flex: isActive ? 3 : 1 }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                            onClick={() => setActiveIndex(index)}
-                            className="relative overflow-hidden rounded-xl border border-amber-600/30 cursor-pointer"
-                        >
-                            <motion.img
-                                src={service.image}
-                                alt={service.title}
-                                className="w-full h-full object-cover"
-                                animate={{ scale: isActive ? 1.05 : 1 }}
-                                transition={{ duration: 0.5, ease: "easeInOut" }}
-                            />
-                            <div className="absolute inset-0 bg-black/40"></div>
-                            
-                            {/* Expanded Content */}
-                            <motion.div 
-                                className="absolute inset-0 p-6 flex flex-col justify-end gap-2"
-                                animate={{ opacity: isActive ? 1 : 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <h3 className="font-serif text-2xl text-white italic">{service.title}</h3>
-                                <p className="text-white/80 font-sans text-sm">{service.description}</p>
-                                <div className="w-16 h-px bg-white/50 mt-1"></div>
-                            </motion.div>
-
-                            {/* Collapsed Content */}
-                            <motion.div
-                                className="absolute inset-0 p-6 flex items-center justify-center"
-                                animate={{ opacity: isActive ? 0 : 1 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <h3 className="font-serif text-2xl text-white italic truncate">{service.title.split('.')[0]}</h3>
-                            </motion.div>
-                        </motion.div>
-                    );
-                })}
-            </div>
-        </section>
-    );
+              {/* Collapsed Content */}
+              <motion.div
+                className="absolute inset-0 p-6 flex items-center justify-center"
+                animate={{ opacity: isActive ? 0 : 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h3 className="font-serif text-2xl text-white italic truncate">
+                  {service.title.split(".")[0]}
+                </h3>
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </section>
+  );
 };
 
 const testimonials = [
-  { name: "Kanku Tshilumba", location: "Bunia", quote: "Un séjour inoubliable, la qualité du service est tout simplement exceptionnelle.", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop" },
-  { name: "Kabeya Mbuyi", location: "Kinshasa", quote: "La vue est spectaculaire, le calme absolu, un véritable havre de paix.", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop" },
-  { name: "Ngalula Makengo", location: "Lubumbashi", quote: "Une architecture moderne alliée à une hospitalité chaleureuse. Je recommande vivement.", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop" },
-  { name: "Mutombo Dikembe", location: "Kisangani", quote: "Chaque détail a été pensé pour notre confort. Une expérience vraiment haut de gamme.", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" },
-  { name: "Kapinga Mulumba", location: "Bunia", quote: "Parfait pour le repos. L'équipe est dévouée et très professionnelle.", image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=200&auto=format&fit=crop" }
+  {
+    name: "Kanku Tshilumba",
+    location: "Bunia",
+    quote:
+      "Un séjour inoubliable, la qualité du service est tout simplement exceptionnelle.",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop",
+  },
+  {
+    name: "Kabeya Mbuyi",
+    location: "Kinshasa",
+    quote:
+      "La vue est spectaculaire, le calme absolu, un véritable havre de paix.",
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop",
+  },
+  {
+    name: "Ngalula Makengo",
+    location: "Lubumbashi",
+    quote:
+      "Une architecture moderne alliée à une hospitalité chaleureuse. Je recommande vivement.",
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+  },
+  {
+    name: "Mutombo Dikembe",
+    location: "Kisangani",
+    quote:
+      "Chaque détail a été pensé pour notre confort. Une expérience vraiment haut de gamme.",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+  },
+  {
+    name: "Kapinga Mulumba",
+    location: "Bunia",
+    quote:
+      "Parfait pour le repos. L'équipe est dévouée et très professionnelle.",
+    image:
+      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=200&auto=format&fit=crop",
+  },
 ];
 
 const TestimonialSection = () => {
   const [index, setIndex] = useState(0);
 
   const next = () => setIndex((prev) => (prev + 1) % testimonials.length);
-  const prev = () => setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  const prev = () =>
+    setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -661,13 +735,14 @@ const TestimonialSection = () => {
             Des expériences qui en disent plus long que mille mots
           </h2>
           <p className="font-sans text-lg text-white/70 max-w-md">
-            Chaque histoire est un reflet de ce que nous défendons : une beauté intemporelle, une indulgence sans effort et une véritable connexion.
+            Chaque histoire est un reflet de ce que nous défendons : une beauté
+            intemporelle, une indulgence sans effort et une véritable connexion.
           </p>
         </div>
 
         <div className="w-full md:w-1/2 relative">
           <TestimonialCard testimonial={testimonials[index]} />
-          
+
           {/* Mobile Dot Indicators */}
           <div className="flex md:hidden justify-center items-center gap-2 mt-8">
             {testimonials.map((_, i) => (
@@ -684,11 +759,17 @@ const TestimonialSection = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex absolute -left-20 top-1/2 -translate-y-1/2 flex-col gap-6">
-            <button onClick={prev} className="p-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors">
-                <ChevronLeft size={24} />
+            <button
+              onClick={prev}
+              className="p-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
+            >
+              <ChevronLeft size={24} />
             </button>
-            <button onClick={next} className="p-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors">
-                <ChevronRight size={24} />
+            <button
+              onClick={next}
+              className="p-4 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
+            >
+              <ChevronRight size={24} />
             </button>
           </div>
         </div>
@@ -697,7 +778,11 @@ const TestimonialSection = () => {
   );
 };
 
-const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonials[0] }) => {
+const TestimonialCard = ({
+  testimonial,
+}: {
+  testimonial: (typeof testimonials)[0];
+}) => {
   return (
     <div className="relative w-full bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-12 rounded-[2rem] shadow-2xl">
       <p className="text-xl md:text-2xl leading-relaxed text-white/90 mb-12">
@@ -916,7 +1001,9 @@ const RoomSlideComponent = ({
               {data.desc}
             </p>
 
-            <div className={`flex flex-col gap-1.5 mb-10 w-full ${data.reverse ? "items-end" : ""}`}>
+            <div
+              className={`flex flex-col gap-1.5 mb-10 w-full ${data.reverse ? "items-end" : ""}`}
+            >
               <h4 className="text-[9px] uppercase tracking-[0.15em] text-zinc-400 font-bold mb-2.5">
                 Inclus
               </h4>
@@ -930,7 +1017,9 @@ const RoomSlideComponent = ({
               ))}
             </div>
 
-            <div className={`flex items-end gap-2.5 ${data.reverse ? "justify-end" : ""}`}>
+            <div
+              className={`flex items-end gap-2.5 ${data.reverse ? "justify-end" : ""}`}
+            >
               <span className="font-serif italic text-3xl lg:text-4xl text-zinc-900">
                 {data.price}
               </span>
@@ -998,7 +1087,7 @@ const ServicesSection = () => {
       const cardWidth = scrollWidth / servicesData.length;
       const index = Math.min(
         Math.round(scrollLeft / cardWidth),
-        servicesData.length - 1
+        servicesData.length - 1,
       );
       setActiveIndex(index);
     }
@@ -1108,106 +1197,121 @@ const ServicesSection = () => {
 };
 
 const galleryImages = [
-  { url: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200&auto=format&fit=crop", alt: "Hotel Interior" },
-  { url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200&auto=format&fit=crop", alt: "Restaurant" },
-  { url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop", alt: "Pool" },
-  { url: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop", alt: "Spa Detail" }
+  {
+    url: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1200&auto=format&fit=crop",
+    alt: "Hotel Interior",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200&auto=format&fit=crop",
+    alt: "Restaurant",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=1200&auto=format&fit=crop",
+    alt: "Pool",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop",
+    alt: "Spa Detail",
+  },
 ];
 
 const MenuDrawer = () => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setIsOpen(false);
-        };
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-    const menuItems = [
-        { label: "Accueil", href: "#" },
-        { label: "Chambres", href: "#" },
-        { label: "Services", href: "#" },
-        { label: "Galerie", href: "#" },
-        { label: "Contact", href: "#" }
-    ];
+  const menuItems = [
+    { label: "Accueil", href: "#" },
+    { label: "Chambres", href: "#" },
+    { label: "Services", href: "#" },
+    { label: "Galerie", href: "#" },
+    { label: "Contact", href: "#" },
+  ];
 
-    return (
-        <>
-            <button
-                onClick={() => setIsOpen(true)}
-                className="flex items-center gap-3 md:gap-4 hover:text-white transition-colors group cursor-pointer"
-                aria-label="Ouvrir le menu"
+  return (
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="flex items-center gap-3 md:gap-4 hover:text-white transition-colors group cursor-pointer"
+        aria-label="Ouvrir le menu"
+      >
+        <div className="flex flex-col gap-[3px] opacity-80 group-hover:opacity-100 transition-opacity">
+          <div className="w-4 h-[1.5px] bg-current" />
+          <div className="w-4 h-[1.5px] bg-current" />
+        </div>
+        MENU
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/20 z-[9998]"
+            />
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="fixed top-0 left-0 w-[300px] h-screen bg-white/20 backdrop-blur-md border-r border-white/10 z-[99999] flex flex-col items-start py-10"
+              role="dialog"
+              aria-modal="true"
             >
-                <div className="flex flex-col gap-[3px] opacity-80 group-hover:opacity-100 transition-opacity">
-                    <div className="w-4 h-[1.5px] bg-current" />
-                    <div className="w-4 h-[1.5px] bg-current" />
-                </div>
-                MENU
-            </button>
-
-            <AnimatePresence>
-                {isOpen && (
-                    <>
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-black/20 z-[9998]"
-                        />
-                        <motion.div
-                            initial={{ x: "-100%" }}
-                            animate={{ x: 0 }}
-                            exit={{ x: "-100%" }}
-                            transition={{ duration: 0.35, ease: "easeOut" }}
-                            className="fixed top-0 left-0 w-[300px] h-screen bg-white/20 backdrop-blur-md border-r border-white/10 z-[99999] flex flex-col items-start py-10"
-                            role="dialog"
-                            aria-modal="true"
-                        >
-                            <button
-                                onClick={() => setIsOpen(false)}
-                                className="mb-10 ml-12 text-white hover:text-zinc-300 transition-colors"
-                                aria-label="Fermer le menu"
-                            >
-                                <X size={32} />
-                            </button>
-                            <nav className="flex flex-col items-start gap-8 w-full px-12">
-                                {menuItems.map((item, idx) => (
-                                    <a
-                                        key={idx}
-                                        href={item.href}
-                                        className="text-base font-normal normal-case text-white hover:text-zinc-300 transition-colors"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        {item.label}
-                                    </a>
-                                ))}
-                            </nav>
-                        </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
-        </>
-    );
+              <button
+                onClick={() => setIsOpen(false)}
+                className="mb-10 ml-12 text-white hover:text-zinc-300 transition-colors"
+                aria-label="Fermer le menu"
+              >
+                <X size={32} />
+              </button>
+              <nav className="flex flex-col items-start gap-8 w-full px-12">
+                {menuItems.map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.href}
+                    className="text-base font-normal normal-case text-white hover:text-zinc-300 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
 };
 
-
 const GallerySection = () => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (selectedImageIndex !== null) {
       document.body.style.overflow = "hidden";
-      
+
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
           setSelectedImageIndex(null);
         } else if (e.key === "ArrowRight") {
           setSelectedImageIndex((prev) => (prev! + 1) % galleryImages.length);
         } else if (e.key === "ArrowLeft") {
-          setSelectedImageIndex((prev) => (prev! - 1 + galleryImages.length) % galleryImages.length);
+          setSelectedImageIndex(
+            (prev) => (prev! - 1 + galleryImages.length) % galleryImages.length,
+          );
         }
       };
 
@@ -1231,7 +1335,9 @@ const GallerySection = () => {
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedImageIndex !== null) {
-      setSelectedImageIndex((prev) => (prev! - 1 + galleryImages.length) % galleryImages.length);
+      setSelectedImageIndex(
+        (prev) => (prev! - 1 + galleryImages.length) % galleryImages.length,
+      );
     }
   };
 
@@ -1246,18 +1352,25 @@ const GallerySection = () => {
 
         <div className="flex md:justify-center">
           <p className="font-sans text-[14px] md:text-[15px] text-zinc-600 max-w-[20rem] leading-[1.6]">
-            Nous proposons une gamme d'installations exceptionnelles pour faire de votre séjour une expérience confortable et mémorable.
+            Nous proposons une gamme d'installations exceptionnelles pour faire
+            de votre séjour une expérience confortable et mémorable.
           </p>
         </div>
 
         <div className="flex md:justify-end">
-          <button 
+          <button
             onClick={() => setSelectedImageIndex(0)}
             className="flex items-center gap-3 border border-zinc-900 rounded-full pl-6 pr-1.5 py-1.5 hover:bg-zinc-50 transition-colors group cursor-pointer w-fit shrink-0"
           >
-            <span className="text-[14px] font-medium text-zinc-900 pr-1 whitespace-nowrap">Voir tout</span>
+            <span className="text-[14px] font-medium text-zinc-900 pr-1 whitespace-nowrap">
+              Voir tout
+            </span>
             <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center transition-transform group-hover:scale-105 shrink-0">
-               <ArrowUpRight size={16} strokeWidth={1.5} className="text-white" />
+              <ArrowUpRight
+                size={16}
+                strokeWidth={1.5}
+                className="text-white"
+              />
             </div>
           </button>
         </div>
@@ -1266,35 +1379,51 @@ const GallerySection = () => {
       {/* Media Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-[800px] md:h-[60vh] lg:h-[70vh]">
         {/* Left Column (Tall) */}
-        <div 
+        <div
           onClick={() => setSelectedImageIndex(0)}
           className="relative w-full h-[300px] md:h-full rounded-[1.5rem] overflow-hidden group cursor-pointer"
         >
-          <img src={galleryImages[0].url} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" alt={galleryImages[0].alt} />
+          <img
+            src={galleryImages[0].url}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            alt={galleryImages[0].alt}
+          />
         </div>
 
         {/* Middle Column (Two stacked) */}
         <div className="flex flex-col gap-4 h-[600px] md:h-full">
-          <div 
+          <div
             onClick={() => setSelectedImageIndex(1)}
             className="relative w-full flex-1 rounded-[1.5rem] overflow-hidden group min-h-0 cursor-pointer"
           >
-            <img src={galleryImages[1].url} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" alt={galleryImages[1].alt} />
+            <img
+              src={galleryImages[1].url}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              alt={galleryImages[1].alt}
+            />
           </div>
-          <div 
+          <div
             onClick={() => setSelectedImageIndex(2)}
             className="relative w-full flex-1 rounded-[1.5rem] overflow-hidden group min-h-0 cursor-pointer"
           >
-            <img src={galleryImages[2].url} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" alt={galleryImages[2].alt} />
+            <img
+              src={galleryImages[2].url}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              alt={galleryImages[2].alt}
+            />
           </div>
         </div>
 
         {/* Right Column (Tall) */}
-        <div 
+        <div
           onClick={() => setSelectedImageIndex(3)}
           className="relative w-full h-[300px] md:h-full rounded-[1.5rem] overflow-hidden group cursor-pointer"
         >
-          <img src={galleryImages[3].url} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]" alt={galleryImages[3].alt} />
+          <img
+            src={galleryImages[3].url}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+            alt={galleryImages[3].alt}
+          />
         </div>
       </div>
 
@@ -1345,7 +1474,7 @@ const GallerySection = () => {
                 onClick={(e) => e.stopPropagation()} // Prevent modal close when clicking image
               />
             </motion.div>
-            
+
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 font-sans text-sm tracking-widest">
               {selectedImageIndex + 1} / {galleryImages.length}
             </div>
@@ -1416,7 +1545,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center md:text-right font-sans text-[13px] md:text-sm text-zinc-900 tracking-wide">
-          © {new Date().getFullYear()} Mia. Tous droits réservés.
+          © {new Date().getFullYear()} Hôtel De La Province. Tous droits réservés.
         </div>
       </div>
     </footer>
